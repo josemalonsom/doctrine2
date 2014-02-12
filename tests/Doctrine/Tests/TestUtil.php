@@ -17,6 +17,9 @@ class TestUtil
      * 'db_username' : The username to use for connecting.
      * 'db_password' : The password to use for connecting.
      * 'db_host' : The hostname of the database to connect to.
+     * 'db_server' : The server name of the database to connect to
+     *               (optional, some vendors allow multiple server instances with different names on the same host).
+     * 'db_protocol' : The protocol for make connection (optional).
      * 'db_name' : The name of the database to connect to.
      * 'db_port' : The port of the database to connect to.
      *
@@ -44,6 +47,15 @@ class TestUtil
                 'dbname' => $GLOBALS['db_name'],
                 'port' => $GLOBALS['db_port']
             );
+
+            if (isset($GLOBALS['db_server'])) {
+                $realDbParams['server'] = $GLOBALS['db_server'];
+            }
+
+            if (isset($GLOBALS['db_protocol'])) {
+                $realDbParams['protocol'] = $GLOBALS['db_protocol'];
+            }
+
             $tmpDbParams = array(
                 'driver' => $GLOBALS['tmpdb_type'],
                 'user' => $GLOBALS['tmpdb_username'],
@@ -52,6 +64,14 @@ class TestUtil
                 'dbname' => $GLOBALS['tmpdb_name'],
                 'port' => $GLOBALS['tmpdb_port']
             );
+
+            if (isset($GLOBALS['tmpdb_server'])) {
+                $tmpDbParams['server'] = $GLOBALS['tmpdb_server'];
+            }
+
+            if (isset($GLOBALS['tmpdb_protocol'])) {
+                $tmpDbParams['protocol'] = $GLOBALS['tmpdb_protocol'];
+            }
 
             $realConn = \Doctrine\DBAL\DriverManager::getConnection($realDbParams);
 
@@ -112,6 +132,14 @@ class TestUtil
             'dbname' => $GLOBALS['tmpdb_name'],
             'port' => $GLOBALS['tmpdb_port']
         );
+
+        if (isset($GLOBALS['tmpdb_server'])) {
+            $tmpDbParams['server'] = $GLOBALS['tmpdb_server'];
+        }
+
+        if (isset($GLOBALS['tmpdb_protocol'])) {
+            $tmpDbParams['protocol'] = $GLOBALS['tmpdb_protocol'];
+        }
 
         // Connect to tmpdb in order to drop and create the real test db.
         return \Doctrine\DBAL\DriverManager::getConnection($tmpDbParams);
